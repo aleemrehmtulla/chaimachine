@@ -7,6 +7,7 @@ const initializeApp = require('firebase/app').initializeApp;
 const set = require('firebase/database').set;
 const ref = require('firebase/database').ref;
 const get = require('firebase/database').get;
+
 const getDatabase = require('firebase/database').getDatabase;
 const firebaseConfig = {
   apiKey: "AIzaSyBZUeGGKkhlGj4f-76wvjFdEgNZ7CpUG3w",
@@ -33,50 +34,130 @@ app.use(favicon(join(__dirname, 'public', 'favicon.ico')))
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-const aleemTheDream = "192.168.2.214"
-const aleemIsSwagger = "192.168.2.97"
+const heat = "192.168.2.159"
+const milk = "192.168.2.214"
+const water = "192.168.2.97"
+
 const client = new Client();
 
 
 // reply to request with the hello world html file
-app.get('/aleemqueenOn', function (req, res) {
-  client.getDevice({ host: aleemTheDream }).then((device) => {
-    device.getSysInfo().then(console.log);
-    device.setPowerState(false);
-  });
+// app.get('/aleemqueenOn', function (req, res) {
+//   client.getDevice({ host: aleemTheDream }).then((device) => {
+//     device.getSysInfo().then(console.log);
+//     device.setPowerState(true);
+//   });
 
-  console.log("Boom " )
+//   console.log("Boom " )
+
+  
+//     const db = getDatabase();
+//     const starCountRef = ref(db, 'status/isOn');
+//     onValue(starCountRef, (snapshot) => {
+//       const data = snapshot.val();
+//       console.log(data);
+//     });
+ 
+//   res.json({"aleem-dream-on": "hi"})
+// })
+// reply to request with the hello world html file
+const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay))
+async function lol(){
+
+    const waterDevice = await client.getDevice({ host: water });
+    const heatDevice = await client.getDevice({ host: heat });
+    const milkDevice = await client.getDevice({ host: milk });
+
+    await waterDevice.setPowerState(true);
+    
+    
+    console.log("Water on")
+    
+    await wait(4000);
+
+    await waterDevice.setPowerState(false);
+  
+    console.log("Water off")
+
+    let temp = sensor.readSimpleC();
+
+    setInterval(() => {
+      console.log(temp)
+    }, 1000);
+
+    // turn on the heat
+    await heatDevice.setPowerState(true);
+    console.log("Heat on")
 
 
-  const val = await get(ref(database, "/status/isOn")).catch((err) =>
-  console.log(err)
-);
+    while(temp < 96) {
+      temp = sensor.readSimpleC();
+      await wait(5000);
+    }
+    
 
-  const users = await val.val();
+    console.log("Milk on")
+    await milkDevice.setPowerState(true);
+    await wait(6000);
+    await milkDevice.setPowerState(false);
+    console.log("Milk off")
 
-  res.json({"aleem-dream-on": users})
-})
+    // milk has been added
+
+    const MILK_BOIL_TEMP = 90
+    const THRESHOLD = 3
+
+    temp = sensor.readSimpleC();
+    
+    // bring temp back up to 96
+    while(temp < MILK_BOIL_TEMP) {
+      temp = sensor.readSimpleC();
+      await wait(5000);
+    }
+
+    // now this is is boiling milk is the current date
+    let boilStartTime = new Date();
+
+    // we want to maintain the boiling temp for 10 minutes
+    while (new Date() - boilStartTime < 10 * 60 * 1000) {
+
+      temp = sensor.readSimpleC();
+
+      if (temp < MILK_BOIL_TEMP - THRESHOLD) {
+        console.log("Milk is too cold, turning on heat")
+        await heatDevice.setPowerState(true);
+      } 
+
+      if (temp > MILK_BOIL_TEMP + THRESHOLD) {
+        console.log("Milk is too hot, turning off heat")
+        await heatDevice.setPowerState(false);
+      }
+      await sleep(5000);
+    }
+
+    // it's been 10 minutes, turn off heat
+    await heatDevice.setPowerState(false);
+
+    console.log("CHAI IS DONE!!!!")
+
+    res.json({"status": "CHAI IS DONE!!!!!!!11111"})
+
+
+  }
+  lol()
 
 
 
 
 
 
-app.get('/aleemqueenOff', function (req, res) {
-  client.getDevice({ host: aleemTheDream }).then((device) => {
-    device.getSysInfo().then(console.log);
-    device.setPowerState(false);
-  });
-  console.log("Boom " )
-  res.json({"aleem-dream-on": "off"})
-})
 
 
 
 app.get('/pump-off', function (req, res) {
-  client.getDevice({ host: aleemTheDream }).then((device) => {
+  client.getDevice({ host: water }).then((device) => {
     device.getSysInfo().then(console.log);
-    device.setPowerState(false);
+    device.setPowerState(true);
   });
   
   res.json({"pump-off": "off"})
@@ -122,6 +203,6 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
   setInterval(function () {
     const tempC = sensor.readSimpleC();
-    console.log(`${tempC} degC`);    
+        
   }, 1000);
 })
