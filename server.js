@@ -25,7 +25,6 @@ const aleemIsSwagger = "192.168.2.97"
 const client = new Client();
 
 const email = "farzadoesstuff@gmail.com"
-const password = "Daftwow1995!"
 const deviceId = "a47b19b6aab086e7a0311607f40e041b"
 
 
