@@ -1,17 +1,30 @@
-
-const { Notion } = require("@neurosity/notion");
 const { Client } = require('tplink-smarthome-api');
 
 const { join } = require('path')
 const express = require('express')
 const favicon = require('serve-favicon')
-
-const { pipe, of, empty } = require("rxjs");
-const { flatMap, map } = require("rxjs/operators");
-
+const initializeApp = require('firebase/app').initializeApp;
+const set = require('firebase/database').set;
+const ref = require('firebase/database').ref;
+const get = require('firebase/database').get;
+const getDatabase = require('firebase/database').getDatabase;
+const firebaseConfig = {
+  apiKey: "AIzaSyBZUeGGKkhlGj4f-76wvjFdEgNZ7CpUG3w",
+  authDomain: "chaimk-457c2.firebaseapp.com",
+  databaseURL: "https://chaimk-457c2-default-rtdb.firebaseio.com",
+  projectId: "chaimk-457c2",
+  storageBucket: "chaimk-457c2.appspot.com",
+  messagingSenderId: "759712792903",
+  appId: "1:759712792903:web:34924ae9fc2571b3d68c62",
+  measurementId: "G-RQR31TJVSK"
+  };
+const fireApp = initializeApp(firebaseConfig);
+const database = getDatabase(fireApp);
 
 const app = express()
 const PORT = 80
+
+console.log("Starting server on port " + PORT);
 
 const Gpio = require('onoff').Gpio;
 const sensor = require('ds18b20-raspi')
@@ -24,53 +37,41 @@ const aleemTheDream = "192.168.2.214"
 const aleemIsSwagger = "192.168.2.97"
 const client = new Client();
 
-const email = "farzadoesstuff@gmail.com"
-const deviceId = "a47b19b6aab086e7a0311607f40e041b"
-
-
-const main = async () => {
-  const fan = new Gpio(21, 'out');
-
-  const notion = new Notion({
-    deviceId
-  });
-
-  await notion.login({
-    email,
-    password
-  })
-  .catch(error => {
-    console.log(error);
-    throw new Error(error);
-  });
-  console.log("Logged in");
-
-  // notion.status().subscribe((status) => {
-  //   console.log(status)
-  // })
-
-  // This is a function that lets us 
-  notion.focus().subscribe((focus) => {
-    console.log(focus)
-    if (focus.probability > 0.35) {
-      fan.writeSync(1)
-    } else {
-      fan.writeSync(0)
-    }
-  });
-}
-
-main();
 
 // reply to request with the hello world html file
-app.get('/aleem-dream-on', function (req, res) {
+app.get('/aleemqueenOn', function (req, res) {
   client.getDevice({ host: aleemTheDream }).then((device) => {
     device.getSysInfo().then(console.log);
     device.setPowerState(false);
   });
 
-  res.json({"aleem-dream-on": "on"})
+  console.log("Boom " )
+
+
+  const val = await get(ref(database, "/status/isOn")).catch((err) =>
+  console.log(err)
+);
+
+  const users = await val.val();
+
+  res.json({"aleem-dream-on": users})
 })
+
+
+
+
+
+
+app.get('/aleemqueenOff', function (req, res) {
+  client.getDevice({ host: aleemTheDream }).then((device) => {
+    device.getSysInfo().then(console.log);
+    device.setPowerState(false);
+  });
+  console.log("Boom " )
+  res.json({"aleem-dream-on": "off"})
+})
+
+
 
 app.get('/pump-off', function (req, res) {
   client.getDevice({ host: aleemTheDream }).then((device) => {
