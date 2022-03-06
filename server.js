@@ -69,20 +69,15 @@ async function lol(){
     const milkDevice = await client.getDevice({ host: milk });
 
     await waterDevice.setPowerState(true);
-    
-    
     console.log("Water on")
-    
     await wait(4000);
-
     await waterDevice.setPowerState(false);
-  
     console.log("Water off")
 
     let temp = sensor.readSimpleC();
-
+    
     setInterval(() => {
-      console.log(temp)
+      console.log("Tempature is "+ sensor.readSimpleC())
     }, 1000);
 
     // turn on the heat
@@ -103,7 +98,6 @@ async function lol(){
     console.log("Milk off")
 
     // milk has been added
-
     const MILK_BOIL_TEMP = 90
     const THRESHOLD = 3
 
@@ -116,13 +110,14 @@ async function lol(){
     }
 
     // now this is is boiling milk is the current date
-    let boilStartTime = new Date();
+    const boilStartTime = Date.now()
 
     // we want to maintain the boiling temp for 10 minutes
-    while (new Date() - boilStartTime < 10 * 60 * 1000) {
+    console.log("Entering while loop")
+    while (Date.now() - boilStartTime < 5 * 60 * 1000) {
 
       temp = sensor.readSimpleC();
-
+      console.log("Tempature is "+ temp)
       if (temp < MILK_BOIL_TEMP - THRESHOLD) {
         console.log("Milk is too cold, turning on heat")
         await heatDevice.setPowerState(true);
@@ -137,6 +132,7 @@ async function lol(){
 
     // it's been 10 minutes, turn off heat
     await heatDevice.setPowerState(false);
+    console.log("Heat off")
 
     console.log("CHAI IS DONE!!!!")
 
