@@ -18,3 +18,7 @@ To give your device a public URL, access the device page on the [balenaCloud das
 [balena-cli]:https://www.balena.io/docs/reference/cli/
 [balena-dashboard]:https://dashboard.balena-cloud.com/
 # chai-machine
+
+
+Temperature from ds18b20:
+- Raspberry PI config must be updated with: BALENA_HOST_CONFIG_dtoverlay = w1-gpio

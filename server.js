@@ -14,6 +14,7 @@ const app = express()
 const PORT = 80
 
 const Gpio = require('onoff').Gpio;
+const sensor = require('ds18b20-raspi')
 
 app.use(favicon(join(__dirname, 'public', 'favicon.ico')))
 app.set('views', join(__dirname, 'views'))
@@ -119,4 +120,8 @@ app.get('/off', function (req, res) {
 // start a server on port 80 and log its start to our console
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
+  setInterval(function () {
+    const tempC = sensor.readSimpleC();
+    console.log(`${tempC} degC`);    
+  }, 1000);
 })
