@@ -1,24 +1,22 @@
-# A Simple Server with Node.js Express
+# THE Chai Machine
 
-[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/balena-io-examples/balena-node-hello-world)
+LOL. this was all memes
 
-This is a simple skeleton Express server project that works on any of the [balena][balena-link] supported devices.
+On my first day moving to SF from Toronto to work @ [Buildspace](https://buildspace.so), I was warmly welcomed to their saturday hackday :)
 
-This project serves up a welcome page on port `:80` of your balena device.
+What were we building? A chai machine -- this repo is all the logic for our micro-controllers.
 
-To get this project up and running, you will need to signup for a balena account [here][signup-page] and set up an application and device. You'll find full details in our [Getting Started tutorial][gettingStarted-link]. 
+TL;DR: we drilled into a fridge,, put pumps and then: a raspberry pi would put milk and spices in a pot, then start heating according to our algorithm.
 
-Once you have downloaded this project, you can `balena push` it using the [balenaCLI][balena-cli]. This command will package up and push the code to the balena builders, where it will be compiled and built and deployed to every device in the application fleet. When it completes, you'll have a node.js web server running on your device and see some logs on your [balenaCloud dashboard][balena-dashboard].
+The tweet ⬇️
 
-To give your device a public URL, access the device page on the [balenaCloud dashboard][balena-dashboard], and choose the _Public Device URL_ toggle. Alternatively, you can point your browser to your device's IP address.
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Just shipped an automated chai machine in 14-hours with the homies at <a href="https://twitter.com/fdotinc?ref_src=twsrc%5Etfw">@fdotinc</a>.<br><br>All controlled w/ a Pi over WiFi that: pumps water into a pot, boils it, pumps cold milk from a mini-fridge in via pipes, then cooks the mixture for 10m @ 90 degrees for a nice, creamy cup of chai ☕️ <a href="https://t.co/ODhQBzPiaH">pic.twitter.com/ODhQBzPiaH</a></p>&mdash; Farza 🇺🇸 🇵🇰 (@FarzaTV) <a href="https://twitter.com/FarzaTV/status/1500421547386802183?ref_src=twsrc%5Etfw">March 6, 2022</a></blockquote> 
 
-[balena-link]:https://balena.io/
-[signup-page]:https://dashboard.balena-cloud.com/signup
-[gettingStarted-link]:http://balena.io/docs/learn/getting-started/
-[balena-cli]:https://www.balena.io/docs/reference/cli/
-[balena-dashboard]:https://dashboard.balena-cloud.com/
-# chai-machine
+<p float="left">
+ <img src="https://user-images.githubusercontent.com/60443878/172433833-2f97c298-2d7c-4590-a4de-c750b6ad005a.jpeg" width="200" h="400" />
+ <img src="https://user-images.githubusercontent.com/60443878/172433847-99d0ece3-88fa-4521-b543-27bd3d6b8307.jpeg" width="200" h="400" /> 
 
-
-Temperature from ds18b20:
-- Raspberry PI config must be updated with: BALENA_HOST_CONFIG_dtoverlay = w1-gpio
+  </p>
+  
+  
+![1500x500](https://user-images.githubusercontent.com/60443878/172433854-e70b408d-446a-4d3f-a8c4-9c2ce877cad9.jpeg)
